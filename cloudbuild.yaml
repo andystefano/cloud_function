@@ -1,6 +1,21 @@
 options:
   logging: CLOUD_LOGGING_ONLY
 steps:
+  # Enable required APIs
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: 'gcloud'
+    args:
+      - 'services'
+      - 'enable'
+      - 'cloudresourcemanager.googleapis.com'
+      - 'cloudfunctions.googleapis.com'
+      - 'cloudbuild.googleapis.com'
+    
+  # Wait a moment for APIs to be fully enabled
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: 'sleep'
+    args: ['30']
+    
   # Deploy the Cloud Function
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
     entrypoint: 'gcloud'
@@ -15,12 +30,5 @@ steps:
       - '--entry-point=createSendEmailTask'
       - '--source=.'
 
-# Optional: Set timeout for the build
-timeout: '600s'
-
-# Optional: Specify which files/directories should trigger the build
-# (uncomment if you want to use this feature)
-# includedFiles:
-#   - 'index.js'
-#   - 'package.json'
-#   - 'package-lock.json'
+# Set timeout for the build (increased due to API enabling)
+timeout: '900s'
