@@ -3,7 +3,7 @@ const mysql = require('mysql2/promise');
 
 // Database configuration
 const dbConfig = {
-  host: '34.59.26.89',
+  host: '10.118.240.3',
   user: 'andy',
   password: 'Nescar88++', // You'll need to add the password here
   database: 'tareas', // You'll need to specify the database name
