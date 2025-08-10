@@ -1,3 +1,5 @@
+options:
+  logging: CLOUD_LOGGING_ONLY
 steps:
   # Deploy the Cloud Function
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
