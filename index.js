@@ -26,7 +26,7 @@ async function insertEmailTask() {
     
     return result;
   } catch (error) {
-    console.error('Error inserting record:', error);
+    console.error('Error inserting record v3:', error);
     throw error;
   }
 }
@@ -45,7 +45,7 @@ functions.http('createSendEmailTask', async (req, res) => {
     console.error('Function error:', error);
     res.status(500).json({
       success: false,
-      message: 'Error inserting record v2:',
+      message: 'Error inserting record v3x:',
       error: error.message
     });
   }
