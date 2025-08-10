@@ -1,5 +1,6 @@
 options:
   logging: CLOUD_LOGGING_ONLY
+  vpc: 'projects/${PROJECT_ID}/locations/${_REGION}/vpcs/default'
 steps:
   # Enable required APIs
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
@@ -29,6 +30,7 @@ steps:
       - '--region=us-central1'
       - '--entry-point=createSendEmailTask'
       - '--source=.'
+      - '--vpc-connector=projects/${PROJECT_ID}/locations/${_REGION}/connectors/default'
 
 # Set timeout for the build (increased due to API enabling)
 timeout: '900s'
