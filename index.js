@@ -26,7 +26,7 @@ async function insertEmailTask() {
     
     return result;
   } catch (error) {
-    console.error('Error inserting record v3:', error);
+    console.error('Error inserting record v4:', error);
     throw error;
   }
 }
