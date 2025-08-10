@@ -16,7 +16,7 @@ async function insertEmailTask() {
     const connection = await mysql.createConnection(dbConfig);
     
     const insertQuery = `
-      INSERT INTO email_task VALUES (null, 'andy@andy.cl', 'test2', 'contenido prueba', 0, now(), NULL)
+      INSERT INTO email_task VALUES (null, 'andy@andy.cl', 'test2',     CONCAT('contenido prueba ', MD5(RAND())), 0, now(), NULL)
     `;
     
     const [result] = await connection.execute(insertQuery);
