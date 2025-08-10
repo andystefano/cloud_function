@@ -1,6 +1,16 @@
 options:
   logging: CLOUD_LOGGING_ONLY
+  machineType: 'E2_HIGHCPU_8'
 steps:
+  # Set project explicitly
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: 'gcloud'
+    args:
+      - 'config'
+      - 'set'
+      - 'project'
+      - '${PROJECT_ID}'
+    
   # Enable required APIs
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
     entrypoint: 'gcloud'
@@ -29,7 +39,8 @@ steps:
       - '--region=us-central1'
       - '--entry-point=createSendEmailTask'
       - '--source=.'
-      - '--vpc-connector=projects/${PROJECT_ID}/locations/${_REGION}/connectors/default'
+      - '--project=${PROJECT_ID}'
+      - '--vpc-connector=projects/${PROJECT_ID}/locations/us-central1/connectors/default'
 
 # Set timeout for the build (increased due to API enabling)
 timeout: '900s'
