@@ -1,0 +1,17 @@
+steps:
+  # Deploy the function
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: 'gcloud'
+    args:
+      - 'functions'
+      - 'deploy'
+      - 'create-send-email-task'  # Cambia por el nombre de tu función
+      - '--runtime=nodejs20'
+      - '--trigger-http'
+      - '--allow-unauthenticated'
+      - '--region=us-central1'    # ← Cambiado a central
+      - '--source=.'
+      - '--entry-point=helloHttp'  # Cambia por tu función de entrada
+
+options:
+  logging: CLOUD_LOGGING_ONLY
