@@ -11,7 +11,7 @@ steps:
       - '--allow-unauthenticated'
       - '--region=us-central1'    # ← Cambiado a central
       - '--source=.'
-      - '--entry-point=helloHttp'  # Cambia por tu función de entrada
+      - '--entry-point=createSendEmailTask'  # Cambia por tu función de entrada
 
 options:
   logging: CLOUD_LOGGING_ONLY
