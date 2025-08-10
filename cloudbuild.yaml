@@ -40,7 +40,7 @@ steps:
       - '--entry-point=createSendEmailTask'
       - '--source=.'
       - '--project=${PROJECT_ID}'
-      - '--vpc-connector=projects/${PROJECT_ID}/locations/us-central1/connectors/default'
+      - '--vpc-connector=projects/${PROJECT_ID}/locations/us-central1/connectors/conector-default-red'
 
 # Set timeout for the build (increased due to API enabling)
 timeout: '900s'
