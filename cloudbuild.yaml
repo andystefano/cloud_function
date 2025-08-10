@@ -1,17 +1,24 @@
 steps:
-  # Deploy the function
+  # Deploy the Cloud Function
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
     entrypoint: 'gcloud'
     args:
       - 'functions'
       - 'deploy'
-      - 'create-send-email-task'  # Cambia por el nombre de tu función
+      - 'create-send-email-task'
       - '--runtime=nodejs20'
       - '--trigger-http'
       - '--allow-unauthenticated'
-      - '--region=us-central1'    # ← Cambiado a central
+      - '--region=us-central1'
+      - '--entry-point=createSendEmailTask'
       - '--source=.'
-      - '--entry-point=createSendEmailTask'  # Cambia por tu función de entrada
 
-options:
-  logging: CLOUD_LOGGING_ONLY
+# Optional: Set timeout for the build
+timeout: '600s'
+
+# Optional: Specify which files/directories should trigger the build
+# (uncomment if you want to use this feature)
+# includedFiles:
+#   - 'index.js'
+#   - 'package.json'
+#   - 'package-lock.json'
