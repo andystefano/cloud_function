@@ -1,24 +1,25 @@
+options:
+  logging: CLOUD_LOGGING_ONLY
+
+substitutions:
+  _BRANCH_NAME: "develop"
+
 steps:
-  # Deploy the Cloud Function
-  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
-    entrypoint: 'gcloud'
+  - name: 'gcr.io/cloud-builders/gcloud'
+    entrypoint: bash
     args:
-      - 'functions'
-      - 'deploy'
-      - 'create-send-email-task'
-      - '--runtime=nodejs20'
-      - '--trigger-http'
-      - '--allow-unauthenticated'
-      - '--region=us-central1'
-      - '--entry-point=createSendEmailTask'
-      - '--source=.'
+      - -c
+      - |
 
-# Optional: Set timeout for the build
-timeout: '600s'
+        echo "SHA del commit: ${COMMIT_SHA}"
+        echo "Nombre de la rama: ${_BRANCH_NAME}"
 
-# Optional: Specify which files/directories should trigger the build
-# (uncomment if you want to use this feature)
-# includedFiles:
-#   - 'index.js'
-#   - 'package.json'
-#   - 'package-lock.json'
+        echo "Deploid tag deploid dev ::: Ejecutando despliegue..."
+
+        echo "Limpiando carpeta remota..."
+        gcloud compute ssh cloud-build \
+          --zone=us-central1-f \
+          --command="rm -rf /var/www/html/*"
+
+        echo "Copiando nuevo código..."
+        gcloud compute scp --recurse * cloud-build:/var/www/html --zone=us-central1-f
