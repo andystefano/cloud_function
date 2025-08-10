@@ -1,6 +1,5 @@
 options:
   logging: CLOUD_LOGGING_ONLY
-  vpc: 'projects/${PROJECT_ID}/locations/${_REGION}/vpcs/default'
 steps:
   # Enable required APIs
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'

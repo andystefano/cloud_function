@@ -45,7 +45,7 @@ functions.http('createSendEmailTask', async (req, res) => {
     console.error('Function error:', error);
     res.status(500).json({
       success: false,
-      message: 'Error inserting record',
+      message: 'Error inserting record v2:',
       error: error.message
     });
   }
