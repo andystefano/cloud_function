@@ -1,7 +1,8 @@
 const functions = require('@google-cloud/functions-framework');
 const mysql = require('mysql2/promise');
+const {PubSub} = require('@google-cloud/pubsub');
 
-// Database configuration
+// Database Configuration
 const dbConfig = {
   host: '10.118.240.3',
   user: 'andy',
@@ -9,6 +10,10 @@ const dbConfig = {
   database: 'tareas', // You'll need to specify the database name
   port: 3306
 };
+
+// Pub/Sub configuration
+const pubsub = new PubSub();
+const topicName = 'create-email-task';
 
 // Function to insert record into email_task table
 async function insertEmailTask() {
@@ -21,12 +26,35 @@ async function insertEmailTask() {
     
     const [result] = await connection.execute(insertQuery);
     
+    // Store the inserted ID in id_email variable
+    const id_email = result.insertId;
+    
     console.log('Record inserted successfully:', result);
+    console.log('ID del email insertado:', id_email);
+    
     await connection.end();
     
-    return result;
+    return { result, id_email };
   } catch (error) {
     console.error('Error inserting record vpc4:', error);
+    throw error;
+  }
+}
+
+// Function to publish message to Pub/Sub topic
+async function publishToPubSub(idEmailTask) {
+  try {
+    const message = {
+      idEmailTask: idEmailTask
+    };
+    
+    const messageBuffer = Buffer.from(JSON.stringify(message), 'utf8');
+    const messageId = await pubsub.topic(topicName).publish(messageBuffer);
+    
+    console.log(`Message ${messageId} published to topic ${topicName}`);
+    return messageId;
+  } catch (error) {
+    console.error('Error publishing to Pub/Sub:', error);
     throw error;
   }
 }
@@ -34,12 +62,17 @@ async function insertEmailTask() {
 functions.http('createSendEmailTask', async (req, res) => {
   try {
     // Insert the record directly into database
-    const result = await insertEmailTask();
+    const { result, id_email } = await insertEmailTask();
+    
+    // Publish the ID to Pub/Sub topic
+    const messageId = await publishToPubSub(id_email);
     
     res.status(200).json({
       success: true,
-      message: 'Record inserted successfully',
-      result: result
+      message: 'Record inserted successfully and published to Pub/Sub',
+      result: result,
+      id_email: id_email,
+      pubsub_message_id: messageId
     });
   } catch (error) {
     console.error('Function error:', error);
@@ -52,4 +85,4 @@ functions.http('createSendEmailTask', async (req, res) => {
 });
 
 // Export for testing
-module.exports = { insertEmailTask };
+module.exports = { insertEmailTask, publishToPubSub };
